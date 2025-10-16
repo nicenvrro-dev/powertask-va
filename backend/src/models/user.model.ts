@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
 
+    serviceFocus: {
+      type: String,
+      enum: ["sales", "administrative-support", "customer-service", ""],
+      default: "",
+    },
+
     password: {
       type: String,
       required: true,

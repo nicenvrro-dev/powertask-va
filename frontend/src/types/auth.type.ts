@@ -1,7 +1,10 @@
+export type Services = "sales" | "administrative-support" | "customer-service";
+
 export type CreateUserAccount = {
   fullname: string;
   email: string;
   phone: string;
+  serviceFocus: Services;
   password: string;
 };
 
@@ -23,6 +26,7 @@ export type BaseUserAccount = {
   fullname: string;
   email: string;
   phone: string;
+  serviceFocus?: Services;
   role: "user" | "admin" | "super_admin";
   active: boolean;
   createdAt: string;
@@ -34,6 +38,7 @@ export type AuthenticatedUser = {
   fullname: string;
   email: string;
   phone: string;
+  serviceFocus: Services | null;
   role: "user" | "admin" | "super_admin";
   active: boolean;
 };

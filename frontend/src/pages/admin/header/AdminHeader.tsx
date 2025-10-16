@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "../../../store/user.store";
-import { getNameInitials } from "../../../utils/getNameInitials.util";
 import type { AdminNavItem } from "../AdminMainPage";
 
 import powertaskLogo from "../../../assets/images/logo.png";
@@ -123,7 +122,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             >
               <div className="w-8 h-8 bg-[#f31b8a] rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">
-                  {getNameInitials(authUser?.fullname)}
+                  {authUser?.fullname.charAt(0).toUpperCase()}
                 </span>
               </div>
               <span className="font-medium text-[#f31b8a]">

@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "../../../store/user.store";
-import { getNameInitials } from "../../../utils/getNameInitials.util";
 import powertaskLogo from "../../../assets/images/logo.png";
 
 interface UserHeaderProps {
@@ -115,7 +114,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ activeNav, onNavChange }) => {
             >
               <div className="w-8 h-8 bg-[#6854b2] rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">
-                  {getNameInitials(authUser?.fullname)}
+                  {authUser?.fullname.charAt(0).toUpperCase()}
                 </span>
               </div>
               <span className="font-medium text-[#6854b2]">

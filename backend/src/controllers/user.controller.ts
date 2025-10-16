@@ -26,10 +26,9 @@ export const getAllUserAccount = async (req: Request, res: Response) => {
 
 export const createUserAccount = async (req: Request, res: Response) => {
   try {
-    const { fullname, email, phone, password } = req.body;
-    console.log("sdfsdfsdfds");
+    const { fullname, email, phone, serviceFocus, password } = req.body;
 
-    if (!fullname || !email || !password) {
+    if (!fullname || !email || !serviceFocus || !password) {
       return res
         .status(400)
         .json({ success: false, message: "Missing required fields" });
@@ -52,6 +51,7 @@ export const createUserAccount = async (req: Request, res: Response) => {
       fullname,
       email,
       phone,
+      serviceFocus,
       password: hashedPassword,
     });
 
@@ -101,6 +101,7 @@ export const loginAccount = async (req: Request, res: Response) => {
         fullname: user.fullname,
         email: user.email,
         phone: user.phone,
+        serviceFocus: user.serviceFocus,
         role: user.role,
       },
     });

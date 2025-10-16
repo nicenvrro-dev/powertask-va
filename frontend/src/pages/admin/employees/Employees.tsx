@@ -1,88 +1,56 @@
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Users, Search, Eye, Mail, TrendingUp } from "lucide-react";
+import {
+  Users,
+  Search,
+  Eye,
+  Mail,
+  TrendingUp,
+  ClipboardCheck,
+  Headphones,
+  HelpCircle,
+} from "lucide-react";
 import { useState } from "react";
-
-interface Employee {
-  id: number;
-  name: string;
-  email: string;
-  avatar?: string;
-  serviceFocus: string;
-  progress: number;
-  modulesCompleted: number;
-  totalModules: number;
-  points: number;
-  status: "Active" | "Inactive";
-  lastActive?: string;
-}
+import { useAuthStore } from "../../../store/user.store";
+import { formatServiceFocus } from "../../../utils/formatServiceFocus.util";
 
 export default function Employees() {
   const [searchQuery, setSearchQuery] = useState("");
   const [serviceFilter, setServiceFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const employees: Employee[] = [
-    {
-      id: 1,
-      name: "Harvey",
-      email: "escosesharbey@gmail.com",
-      avatar: undefined,
-      serviceFocus: "Not Assigned",
-      progress: 0,
-      modulesCompleted: 0,
-      totalModules: 0,
-      points: 0,
-      status: "Inactive",
-    },
-    {
-      id: 2,
-      name: "Test",
-      email: "test@1.com",
-      avatar: undefined,
-      serviceFocus: "Sales & Lead Generation",
-      progress: 25,
-      modulesCompleted: 0,
-      totalModules: 1,
-      points: 5,
-      status: "Active",
-      lastActive: "Oct 9, 2025",
-    },
-    {
-      id: 3,
-      name: "Test",
-      email: "test@1.com",
-      avatar: undefined,
-      serviceFocus: "Sales & Lead Generation",
-      progress: 25,
-      modulesCompleted: 0,
-      totalModules: 1,
-      points: 15,
-      status: "Active",
-      lastActive: "Oct 9, 2025",
-    },
-    {
-      id: 4,
-      name: "Test",
-      email: "test@1.com",
-      avatar: undefined,
-      serviceFocus: "Sales & Lead Generation",
-      progress: 25,
-      modulesCompleted: 0,
-      totalModules: 1,
-      points: 0,
-      status: "Active",
-      lastActive: "Oct 9, 2025",
-    },
-  ];
+  const { allUsers, getAllUserAccount } = useAuthStore();
 
-  const filteredEmployees = employees.filter((emp) => {
+  useEffect(() => {
+    getAllUserAccount();
+  }, [getAllUserAccount]);
+
+  const filteredEmployees = allUsers.filter((user) => {
     const matchesSearch =
-      emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      emp.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesService = serviceFilter === "all" || emp.serviceFocus === serviceFilter;
-    const matchesStatus = statusFilter === "all" || emp.status.toLowerCase() === statusFilter;
+      user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesService =
+      serviceFilter === "all" || user.serviceFocus === serviceFilter;
+    const matchesStatus =
+      statusFilter === "all" ||
+      (user.active ? "active" : "inactive") === statusFilter;
     return matchesSearch && matchesService && matchesStatus;
   });
+
+  /**
+   * Returns the appropriate icon component based on the service focus.
+   * @param {string} serviceFocus - One of: "sales", "administrative-support", "customer-service"
+   * @returns {JSX.Element} Corresponding icon component
+   */
+  function getServiceFocusIcon(serviceFocus: string): React.ReactNode {
+    const iconMap: Record<string, React.ReactNode> = {
+      sales: <TrendingUp className="w-4 h-4" />,
+      "administrative-support": <ClipboardCheck className="w-4 h-4" />,
+      "customer-service": <Headphones className="w-4 h-4" />,
+    };
+
+    return iconMap[serviceFocus] || <HelpCircle className="w-4 h-4" />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -95,10 +63,13 @@ export default function Employees() {
         >
           <div className="flex items-center gap-3 mb-3">
             <Users className="w-8 h-8 text-gray-700" strokeWidth={2} />
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Employee Management</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+              Employee Management
+            </h1>
           </div>
           <p className="text-gray-600 text-base md:text-lg">
-            View and manage all employee accounts, track progress, and monitor performance.
+            View and manage all employee accounts, track progress, and monitor
+            performance.
           </p>
         </motion.div>
 
@@ -126,7 +97,11 @@ export default function Employees() {
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
               >
                 <option value="all">All Services</option>
-                <option value="Sales & Lead Generation">Sales & Lead Generation</option>
+                <option value="sales">Sales & Lead Generation</option>
+                <option value="administrative-support">
+                  Administrative Support
+                </option>
+                <option value="customer-service">Customer Service</option>
                 <option value="Not Assigned">Not Assigned</option>
               </select>
             </div>
@@ -155,7 +130,9 @@ export default function Employees() {
               <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                 <Users className="w-5 h-5 text-gray-800" />
               </div>
-              <h2 className="text-xl font-bold text-gray-800">Employee Directory</h2>
+              <h2 className="text-xl font-bold text-gray-800">
+                Employee Directory
+              </h2>
             </div>
             <div className="px-4 py-2 bg-[#1A3D2D] text-white rounded-full text-sm font-semibold">
               {filteredEmployees.length} Total
@@ -192,7 +169,7 @@ export default function Employees() {
               <tbody className="divide-y divide-gray-100">
                 {filteredEmployees.map((employee, index) => (
                   <motion.tr
-                    key={employee.id}
+                    key={index}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
@@ -202,12 +179,13 @@ export default function Employees() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                           <span className="text-white font-semibold text-sm">
-                            {employee.name.charAt(0).toUpperCase()}
+                            {employee.fullname.charAt(0).toUpperCase()}
                           </span>
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-800">{employee.name}</div>
-                          <div className="text-sm text-gray-500">{employee.email}</div>
+                          <div className="font-semibold text-gray-800">
+                            {employee.fullname}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -219,54 +197,47 @@ export default function Employees() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        {employee.serviceFocus === "Not Assigned" ? (
-                          <span className="text-gray-400 text-sm flex items-center gap-2">
-                            <span className="text-lg">?</span>
-                            Not Assigned
-                          </span>
-                        ) : (
-                          <span className="text-gray-700 text-sm flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4" />
-                            {employee.serviceFocus}
-                          </span>
-                        )}
+                        <span className="text-gray-700 text-sm flex items-center gap-2">
+                          {employee.serviceFocus &&
+                            getServiceFocusIcon(employee.serviceFocus)}
+                          {employee.serviceFocus
+                            ? formatServiceFocus(employee.serviceFocus)
+                            : "Not Assigned"}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="space-y-2 min-w-[120px]">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-semibold text-gray-700">
-                            {employee.progress}%
+                            0%
                           </span>
                           <span className="text-xs text-gray-500">
-                            {employee.modulesCompleted}/{employee.totalModules} modules
+                            0/0 modules
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                            style={{ width: `${employee.progress}%` }}
+                            style={{ width: `50%` }}
                           />
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-gray-800">{employee.points} pts</span>
+                      <span className="font-semibold text-gray-800">5 pts</span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="space-y-1">
                         <span
                           className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                            employee.status === "Active"
+                            employee.active
                               ? "bg-green-100 text-green-700"
                               : "bg-red-100 text-red-700"
                           }`}
                         >
-                          {employee.status}
+                          {employee.active ? "Active" : "Inactive"}
                         </span>
-                        {employee.lastActive && (
-                          <div className="text-xs text-gray-500">Last: {employee.lastActive}</div>
-                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -284,8 +255,12 @@ export default function Employees() {
           {filteredEmployees.length === 0 && (
             <div className="text-center py-12">
               <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">No employees found</h3>
-              <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                No employees found
+              </h3>
+              <p className="text-gray-500">
+                Try adjusting your search or filter criteria
+              </p>
             </div>
           )}
         </motion.div>

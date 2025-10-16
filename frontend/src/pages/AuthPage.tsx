@@ -5,6 +5,7 @@ import { Eye, EyeOff, HelpCircle, LogIn, UserPlus } from "lucide-react";
 import type {
   CreateUserAccount,
   LoginAccountPayload,
+  Services,
 } from "../types/auth.type";
 import { useAuthStore } from "../store/user.store";
 
@@ -24,11 +25,15 @@ export default function AuthPage() {
   } = useAuthStore();
 
   const [isSignUp, setIsSignUp] = useState(false);
+
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [serviceFocus, setServiceFocus] = useState<Services>("sales");
+
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -92,6 +97,7 @@ export default function AuthPage() {
         fullname,
         email,
         phone: phoneNumber,
+        serviceFocus,
         password,
       };
       await createNewAccount(payload);
@@ -301,6 +307,32 @@ export default function AuthPage() {
                     }}
                     className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
                   />
+
+                  <div className="space-y-2 mt-2">
+                    <label className="text-[10px] sm:text-xs text-gray-600 font-medium block">
+                      Service Focus
+                    </label>
+                    <select
+                      value={serviceFocus}
+                      onChange={(e) =>
+                        setServiceFocus(e.target.value as Services)
+                      }
+                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all appearance-none cursor-pointer"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 0.75rem center",
+                        paddingRight: "2.5rem",
+                      }}
+                    >
+                      <option value="">Select your focus area</option>
+                      <option value="sales">Sales and Lead Generation</option>
+                      <option value="administrative-support">
+                        Administrative Support
+                      </option>
+                      <option value="customer-service">Customer Service</option>
+                    </select>
+                  </div>
 
                   <div className="space-y-2 mt-2">
                     <div className="flex items-center justify-between mb-1">
