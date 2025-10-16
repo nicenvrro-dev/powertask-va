@@ -175,7 +175,10 @@ export default function Modules() {
           className="mb-6"
         >
           <div className="flex items-center gap-3 mb-3">
-            <GraduationCap className="w-8 h-8 text-gray-800" strokeWidth={2.5} />
+            <GraduationCap
+              className="w-8 h-8 text-gray-800"
+              strokeWidth={2.5}
+            />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
                 Training Module Management
@@ -244,8 +247,12 @@ export default function Modules() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-gray-600 mb-1">Total Modules</p>
-                  <p className="text-3xl font-bold text-gray-800">{currentModules.length}</p>
+                  <p className="text-sm font-semibold text-gray-600 mb-1">
+                    Total Modules
+                  </p>
+                  <p className="text-3xl font-bold text-gray-800">
+                    {currentModules.length}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <BookOpen className="w-6 h-6 text-blue-600" />
@@ -261,7 +268,9 @@ export default function Modules() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-gray-600 mb-1">Active Modules</p>
+                  <p className="text-sm font-semibold text-gray-600 mb-1">
+                    Active Modules
+                  </p>
                   <p className="text-3xl font-bold text-gray-800">
                     {currentModules.filter((m) => m.status === "ACTIVE").length}
                   </p>
@@ -280,9 +289,15 @@ export default function Modules() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-gray-600 mb-1">Total Duration</p>
+                  <p className="text-sm font-semibold text-gray-600 mb-1">
+                    Total Duration
+                  </p>
                   <p className="text-3xl font-bold text-gray-800">
-                    {Math.round(currentModules.reduce((acc, m) => acc + m.duration, 0) / 60)}h
+                    {Math.round(
+                      currentModules.reduce((acc, m) => acc + m.duration, 0) /
+                        60
+                    )}
+                    h
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
@@ -367,7 +382,9 @@ export default function Modules() {
                       {module.status}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed">{module.description}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {module.description}
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4 pb-4 border-b border-gray-100">
@@ -390,11 +407,11 @@ export default function Modules() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <button className="flex-1 px-4 py-2.5 bg-blue-700 text-white rounded-lg cursor-pointer font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                  <button className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg cursor-pointer font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
                     <Eye className="w-4 h-4" />
                     View
                   </button>
-                  <button className="flex-1 px-4 py-2.5 bg-blue-700 text-white rounded-lg cursor-pointer font-semibold hover:from-gray-800 hover:to-black transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                  <button className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg cursor-pointer font-semibold hover:from-gray-800 hover:to-black transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
                     <BookOpen className="w-4 h-4" />
                     Manage Chapters
                   </button>
@@ -417,8 +434,12 @@ export default function Modules() {
             className="bg-white rounded-2xl shadow-lg p-12 text-center"
           >
             <GraduationCap className="w-20 h-20 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-gray-700 mb-2">No modules found</h3>
-            <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+            <h3 className="text-xl font-bold text-gray-700 mb-2">
+              No modules found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search or filter criteria
+            </p>
           </motion.div>
         )}
 

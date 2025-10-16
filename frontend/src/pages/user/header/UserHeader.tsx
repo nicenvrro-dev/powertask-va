@@ -13,7 +13,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "../../../store/user.store";
 import { getNameInitials } from "../../../utils/getNameInitials.util";
-import powertaskLogo from "../../../assets/images/powertask-logo.png";
+import powertaskLogo from "../../../assets/images/logo.png";
 
 interface UserHeaderProps {
   activeNav: UserNavItem;
@@ -48,7 +48,11 @@ const UserHeader: React.FC<UserHeaderProps> = ({ activeNav, onNavChange }) => {
   };
 
   const menuItems = [
-    { icon: User, label: "Profile", action: () => console.log("Profile clicked") },
+    {
+      icon: User,
+      label: "Profile",
+      action: () => console.log("Profile clicked"),
+    },
     {
       icon: RefreshCw,
       label: "Change Services",
@@ -114,7 +118,9 @@ const UserHeader: React.FC<UserHeaderProps> = ({ activeNav, onNavChange }) => {
                   {getNameInitials(authUser?.fullname)}
                 </span>
               </div>
-              <span className="font-medium text-[#6854b2]">{authUser?.fullname}</span>
+              <span className="font-medium text-[#6854b2]">
+                {authUser?.fullname}
+              </span>
               <motion.div
                 animate={{ rotate: isPopoverOpen ? 180 : 0 }}
                 transition={{ duration: 0.2 }}

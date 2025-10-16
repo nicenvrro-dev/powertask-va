@@ -1,8 +1,16 @@
-export type CreateAccountPayload = {
+export type CreateUserAccount = {
   fullname: string;
   email: string;
   phone: string;
   password: string;
+};
+
+export type CreateAdminAccount = {
+  fullname: string;
+  email: string;
+  phone: string;
+  password: string;
+  role: "admin" | "super_admin";
 };
 
 export type LoginAccountPayload = {
@@ -10,21 +18,42 @@ export type LoginAccountPayload = {
   password: string;
 };
 
+export type BaseUserAccount = {
+  _id: string;
+  fullname: string;
+  email: string;
+  phone: string;
+  role: "user" | "admin" | "super_admin";
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type AuthenticatedUser = {
   id: string;
   fullname: string;
   email: string;
   phone: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | "super_admin";
+  active: boolean;
 };
 
 export type UserAuthStore = {
   createNewAccountLoading: boolean;
+  createAdminAccountLoading: boolean;
   loginAccountLoading: boolean;
+  deleteAccountLoading: boolean;
 
   authUser: AuthenticatedUser | null;
+  allUsers: BaseUserAccount[];
+  allAdminUsers: BaseUserAccount[];
 
-  createNewAccount: (payload: CreateAccountPayload) => Promise<void>;
+  getAllUserAccount: () => Promise<BaseUserAccount>;
+  getAllAdminAccount: () => Promise<BaseUserAccount>;
+
+  createNewAccount: (payload: CreateUserAccount) => Promise<void>;
+  createAdminAccount: (payload: CreateAdminAccount) => Promise<BaseUserAccount>;
   loginAccount: (payload: LoginAccountPayload) => Promise<AuthenticatedUser>;
+  deleteUserById: (id: string) => Promise<void>;
   logoutAccount: () => Promise<void>;
 };

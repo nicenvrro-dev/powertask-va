@@ -1,19 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
-import type { CreateAccountPayload, LoginAccountPayload } from "../types/auth.type";
+import { Eye, EyeOff, HelpCircle, LogIn, UserPlus } from "lucide-react";
+import type {
+  CreateUserAccount,
+  LoginAccountPayload,
+} from "../types/auth.type";
 import { useAuthStore } from "../store/user.store";
 
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { calculatePasswordStrength } from "../utils/calculatePasswordStrength.util";
 
 export default function AuthPage() {
   const [isEmailFocused, setIsEmailFocused] = useState(true); // active border initially
   const emailInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const { createNewAccount, createNewAccountLoading, loginAccount, loginAccountLoading } =
-    useAuthStore();
+  const {
+    createNewAccount,
+    createNewAccountLoading,
+    loginAccount,
+    loginAccountLoading,
+  } = useAuthStore();
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
@@ -31,6 +39,8 @@ export default function AuthPage() {
     }
   }, []);
 
+  const passwordStrength = calculatePasswordStrength(password);
+
   const handleSignInSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -46,7 +56,10 @@ export default function AuthPage() {
 
       const authenticatedUser = await loginAccount(payload);
       if (authenticatedUser) {
-        if (authenticatedUser.role === "admin") {
+        if (
+          authenticatedUser.role === "admin" ||
+          authenticatedUser.role === "super_admin"
+        ) {
           navigate("/admin-page");
         } else {
           navigate("/user-page");
@@ -66,12 +79,16 @@ export default function AuthPage() {
       return toast.error("Missing required fields");
     }
 
+    if (password && passwordStrength.label === "Weak") {
+      return toast.error("Use a stronger password");
+    }
+
     if (password !== confirmPassword) {
-      return toast.error("Passwords don't match.");
+      return toast.error("Passwords do not match");
     }
 
     try {
-      const payload: CreateAccountPayload = {
+      const payload: CreateUserAccount = {
         fullname,
         email,
         phone: phoneNumber,
@@ -126,13 +143,18 @@ export default function AuthPage() {
               >
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <LogIn className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" />
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Welcome Back</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                    Welcome Back
+                  </h1>
                 </div>
                 <p className="text-gray-500 text-center mb-5 sm:mb-6 text-xs sm:text-sm">
                   Sign in to continue your learning journey
                 </p>
 
-                <form onSubmit={handleSignInSubmit} className="space-y-3 sm:space-y-3.5">
+                <form
+                  onSubmit={handleSignInSubmit}
+                  className="space-y-3 sm:space-y-3.5"
+                >
                   <input
                     ref={emailInputRef}
                     type="email"
@@ -142,7 +164,9 @@ export default function AuthPage() {
                     onFocus={() => setIsEmailFocused(true)}
                     onBlur={() => setIsEmailFocused(false)}
                     className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 placeholder-gray-400 focus:outline-none transition-all ${
-                      isEmailFocused ? "ring-2 ring-blue-400" : "focus:ring-2 focus:ring-blue-400"
+                      isEmailFocused
+                        ? "ring-2 ring-blue-400"
+                        : "focus:ring-2 focus:ring-blue-400"
                     }`}
                   />
 
@@ -159,7 +183,11 @@ export default function AuthPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
 
@@ -233,13 +261,18 @@ export default function AuthPage() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <UserPlus className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" />
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Create Account</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                    Create Account
+                  </h1>
                 </div>
                 <p className="text-gray-500 mb-4 sm:mb-5 text-xs sm:text-sm">
                   Join PowerTask and start your learning journey
                 </p>
 
-                <form onSubmit={handleSignupSubmit} className="space-y-2.5 sm:space-y-3">
+                <form
+                  onSubmit={handleSignupSubmit}
+                  className="space-y-2.5 sm:space-y-3"
+                >
                   <input
                     type="text"
                     placeholder="Full Name"
@@ -269,38 +302,101 @@ export default function AuthPage() {
                     className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
                   />
 
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
+                  <div className="space-y-2 mt-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-[10px] sm:text-xs text-gray-600 font-medium">
+                        Password
+                      </label>
+                      <div className="relative group">
+                        <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 hover:text-[#4A90E2] cursor-help transition-colors" />
+                        <div className="absolute bottom-full right-0 mb-2 w-56 sm:w-64 p-3 bg-gray-800 text-white text-[10px] sm:text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                          <div className="font-semibold mb-1.5">
+                            Password Requirements:
+                          </div>
+                          <ul className="space-y-1 list-disc list-inside">
+                            <li>At least 8 characters</li>
+                            <li>Uppercase & lowercase letters</li>
+                            <li>At least one number</li>
+                            <li>Special character (!@#$%^&*)</li>
+                          </ul>
+                          <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className="text-[10px] sm:text-xs text-gray-500 -mt-1">
-                    Password strength
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Min. 8 characters"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                      />
+
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {password && (
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] sm:text-xs text-gray-500">
+                            Password strength
+                          </span>
+                          <span
+                            className={`text-[10px] sm:text-xs font-semibold ${
+                              passwordStrength.label === "Weak"
+                                ? "text-red-500"
+                                : passwordStrength.label === "Fair"
+                                ? "text-orange-500"
+                                : passwordStrength.label === "Good"
+                                ? "text-yellow-500"
+                                : "text-green-500"
+                            }`}
+                          >
+                            {passwordStrength.label}
+                          </span>
+                        </div>
+                        <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{
+                              width: `${
+                                (passwordStrength.strength / 5) * 100
+                              }%`,
+                            }}
+                            transition={{ duration: 0.3 }}
+                            className={`h-full ${passwordStrength.color} transition-colors`}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="relative">
                     <input
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm Password"
+                      placeholder="Re-enter password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
                       {showConfirmPassword ? (

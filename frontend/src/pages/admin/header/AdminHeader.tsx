@@ -11,15 +11,19 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "../../../store/user.store";
 import { getNameInitials } from "../../../utils/getNameInitials.util";
-import powertaskLogo from "../../../assets/images/powertask-logo.png";
 import type { AdminNavItem } from "../AdminMainPage";
+
+import powertaskLogo from "../../../assets/images/logo.png";
 
 interface AdminHeaderProps {
   activeNav: AdminNavItem;
   onNavChange: (nav: AdminNavItem) => void;
 }
 
-const AdminHeader: React.FC<AdminHeaderProps> = ({ activeNav, onNavChange }) => {
+const AdminHeader: React.FC<AdminHeaderProps> = ({
+  activeNav,
+  onNavChange,
+}) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -47,7 +51,11 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ activeNav, onNavChange }) => 
   };
 
   const menuItems = [
-    { icon: User, label: "Profile", action: () => console.log("Profile clicked") },
+    {
+      icon: User,
+      label: "Profile",
+      action: () => console.log("Profile clicked"),
+    },
 
     {
       icon: LogOut,
@@ -58,9 +66,17 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ activeNav, onNavChange }) => 
   ];
 
   const navItems = [
-    { id: "dashboard" as AdminNavItem, icon: ShieldUser, label: "Admin Dashboard" },
+    {
+      id: "dashboard" as AdminNavItem,
+      icon: ShieldUser,
+      label: "Admin Dashboard",
+    },
     { id: "employees" as AdminNavItem, icon: User, label: "Employees" },
-    { id: "feedback" as AdminNavItem, icon: MessageCircleMore, label: "Feedback" },
+    {
+      id: "feedback" as AdminNavItem,
+      icon: MessageCircleMore,
+      label: "Feedback",
+    },
     { id: "modules" as AdminNavItem, icon: Layers, label: "Modules" },
     { id: "settings" as AdminNavItem, icon: Settings2, label: "Settings" },
   ];
@@ -70,7 +86,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ activeNav, onNavChange }) => 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-[#1A3D2D] shadow-sm sticky top-0 z-50"
+      className="bg-white shadow-sm sticky top-0 z-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -82,15 +98,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ activeNav, onNavChange }) => 
             />
           </div>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-4">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onNavChange(item.id)}
-                className={`flex items-center gap-2 transition-colors cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-3 transition-colors rounded-lg cursor-pointer ${
                   activeNav === item.id
-                    ? "text-blue-500 font-semibold"
-                    : "text-white hover:text-blue-500"
+                    ? "bg-gray-100 text-gray-900 font-semibold"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
                 <item.icon className="w-5 h-5" />
@@ -105,12 +121,14 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ activeNav, onNavChange }) => 
               onClick={() => setIsPopoverOpen(!isPopoverOpen)}
               className="flex items-center gap-2 px-4 py-2 text-white rounded-full cursor-pointer transition-colors"
             >
-              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                <span className="text-[#f31b8a] font-bold text-sm">
+              <div className="w-8 h-8 bg-[#f31b8a] rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">
                   {getNameInitials(authUser?.fullname)}
                 </span>
               </div>
-              <span className="font-medium text-[#f31b8a]">{authUser?.fullname}</span>
+              <span className="font-medium text-[#f31b8a]">
+                {authUser?.fullname}
+              </span>
               <motion.div
                 animate={{ rotate: isPopoverOpen ? 180 : 0 }}
                 transition={{ duration: 0.2 }}

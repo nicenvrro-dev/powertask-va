@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import AdminHeader from "./header/AdminHeader";
 import Employees from "./employees/Employees";
 import AdminDashboard from "./admin-dashboard/AdminDashboard";
 import AdminFeedback from "./feedback/AdminFeedback";
 import Modules from "./modules/Modules";
-import EmptyState from "../user/components/EmptyState";
-import { Settings } from "lucide-react";
+import Settings from "./admin-settings/Settings";
+import { useAuthStore } from "../../store/user.store";
 
-export type AdminNavItem = "dashboard" | "employees" | "feedback" | "modules" | "settings";
+export type AdminNavItem =
+  | "dashboard"
+  | "employees"
+  | "feedback"
+  | "modules"
+  | "settings";
 
 const AdminMainPage = () => {
   const [activeNav, setActiveNav] = useState<AdminNavItem>("dashboard");
+  const { getAllAdminAccount } = useAuthStore();
+
+  useEffect(() => {
+    getAllAdminAccount();
+  }, [getAllAdminAccount]);
 
   const renderContent = () => {
     switch (activeNav) {
@@ -23,7 +34,7 @@ const AdminMainPage = () => {
       case "modules":
         return <Modules />;
       case "settings":
-        return <EmptyState icon={Settings} title="Settings" description="Coming Soon" />;
+        return <Settings />;
       default:
         return <AdminDashboard />;
     }
@@ -34,7 +45,9 @@ const AdminMainPage = () => {
       <AdminHeader activeNav={activeNav} onNavChange={setActiveNav} />
 
       {/* Make the main content area scrollable */}
-      <main className="flex-1 overflow-y-auto custom-scrollbar">{renderContent()}</main>
+      <main className="flex-1 overflow-y-auto custom-scrollbar">
+        {renderContent()}
+      </main>
     </div>
   );
 };
