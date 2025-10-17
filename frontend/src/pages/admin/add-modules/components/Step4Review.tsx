@@ -1,31 +1,30 @@
 import { motion } from "framer-motion";
 import { BookOpen } from "lucide-react";
-import type { Chapter, ModuleFormData } from "../types/add-module.type";
+import type { Lesson, ModuleFormData } from "../types/add-module.type";
 import {
   getCategoryLabel,
   calculateTotalDuration,
   getTotalQACount,
   getTotalQuizCount,
 } from "../utils/add-module.util";
-
-import ReviewChapterCard from "./ReviewChapterCard";
+import ReviewLessonCard from "./ReviewLessonCard";
 
 interface Step4ReviewProps {
   formData: ModuleFormData;
-  chapters: Chapter[];
-  expandedChapter: string | null;
-  onToggleChapter: (chapterId: string) => void;
+  lessons: Lesson[];
+  expandedLesson: string | null;
+  onToggleLesson: (lessonId: string) => void;
 }
 
 export default function Step4Review({
   formData,
-  chapters,
-  expandedChapter,
-  onToggleChapter,
+  lessons,
+  expandedLesson,
+  onToggleLesson,
 }: Step4ReviewProps) {
-  const totalDuration = calculateTotalDuration(chapters);
-  const totalQA = getTotalQACount(chapters);
-  const totalQuiz = getTotalQuizCount(chapters);
+  const totalDuration = calculateTotalDuration(lessons);
+  const totalQA = getTotalQACount(lessons);
+  const totalQuiz = getTotalQuizCount(lessons);
 
   return (
     <motion.div
@@ -35,9 +34,12 @@ export default function Step4Review({
       className="space-y-6"
     >
       <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
-        <h3 className="font-semibold text-blue-900 mb-1">Review Your Training Module</h3>
+        <h3 className="font-semibold text-blue-900 mb-1">
+          Review Your Training Module
+        </h3>
         <p className="text-sm text-blue-700">
-          Review your training module details before publishing. You can go back to edit if needed.
+          Review your training module details before publishing. You can go back
+          to edit if needed.
         </p>
       </div>
 
@@ -48,7 +50,9 @@ export default function Step4Review({
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-800">Module Overview</h3>
-            <p className="text-sm text-gray-500">General information and metadata</p>
+            <p className="text-sm text-gray-500">
+              General information and metadata
+            </p>
           </div>
         </div>
 
@@ -75,55 +79,35 @@ export default function Step4Review({
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Level
             </label>
-            <p className="text-base font-semibold text-gray-800 mt-1">{formData.level}</p>
+            <p className="text-base font-semibold text-gray-800 mt-1">
+              {formData.level}
+            </p>
           </div>
 
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Total Duration
             </label>
-            <p className="text-base font-semibold text-gray-800 mt-1">{totalDuration} minutes</p>
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              Status
-            </label>
-            <span
-              className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${
-                formData.status === "ACTIVE"
-                  ? "bg-green-100 text-green-700"
-                  : formData.status === "DRAFT"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {formData.status}
-            </span>
+            <p className="text-base font-semibold text-gray-800 mt-1">
+              {totalDuration} minutes
+            </p>
           </div>
 
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Language
             </label>
-            <p className="text-base font-semibold text-gray-800 mt-1">{formData.language}</p>
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              Short Description
-            </label>
-            <p className="text-base text-gray-800 mt-1">
-              {formData.shortDescription || "Not provided"}
+            <p className="text-base font-semibold text-gray-800 mt-1">
+              {formData.language}
             </p>
           </div>
 
           <div className="md:col-span-2">
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              Detailed Description
+              Module Description
             </label>
-            <p className="text-base text-gray-800 mt-1">
-              {formData.detailedDescription || "Not provided"}
+            <p className="text-base text-gray-800 mt-1 whitespace-pre-wrap">
+              {formData.description || "Not provided"}
             </p>
           </div>
 
@@ -132,7 +116,9 @@ export default function Step4Review({
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                 Prerequisites
               </label>
-              <p className="text-base text-gray-800 mt-1">{formData.prerequisites}</p>
+              <p className="text-base text-gray-800 mt-1">
+                {formData.prerequisites}
+              </p>
             </div>
           )}
 
@@ -144,7 +130,10 @@ export default function Step4Review({
               {formData.learningObjectives
                 .filter((obj) => obj.trim() !== "")
                 .map((obj, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-base text-gray-800">
+                  <li
+                    key={idx}
+                    className="flex items-start gap-2 text-base text-gray-800"
+                  >
                     <span className="text-emerald-600 mt-1">•</span>
                     <span>{obj}</span>
                   </li>
@@ -182,26 +171,28 @@ export default function Step4Review({
               <BookOpen className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-800">Chapters Summary</h3>
+              <h3 className="text-xl font-bold text-gray-800">
+                Lessons Summary
+              </h3>
               <p className="text-sm text-gray-500">
-                {chapters.length} chapter(s) · {totalQA} Q&A · {totalQuiz} Quiz
+                {lessons.length} lesson(s) · {totalQuiz} Quiz · {totalQA} Q&A
               </p>
             </div>
           </div>
         </div>
 
-        {chapters.length === 0 ? (
+        {lessons.length === 0 ? (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-            <p className="text-gray-500">No chapters added yet</p>
+            <p className="text-gray-500">No lessons added yet</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {chapters.map((chapter) => (
-              <ReviewChapterCard
-                key={chapter.id}
-                chapter={chapter}
-                isExpanded={expandedChapter === chapter.id}
-                onToggle={() => onToggleChapter(chapter.id)}
+            {lessons.map((lesson) => (
+              <ReviewLessonCard
+                key={lesson.id}
+                lesson={lesson}
+                isExpanded={expandedLesson === lesson.id}
+                onToggle={() => onToggleLesson(lesson.id)}
               />
             ))}
           </div>
@@ -211,8 +202,8 @@ export default function Step4Review({
       <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
         <h4 className="font-semibold text-green-900 mb-1">Ready to Publish?</h4>
         <p className="text-sm text-green-700">
-          Once you publish this module, it will be visible to all assigned users. You can always
-          edit it later.
+          Once you publish this module, it will be visible to all assigned
+          users. You can always edit it later.
         </p>
       </div>
     </motion.div>

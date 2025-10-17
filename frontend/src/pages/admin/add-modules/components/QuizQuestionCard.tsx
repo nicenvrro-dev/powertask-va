@@ -1,5 +1,8 @@
 import { Trash2 } from "lucide-react";
-import type { QuizQuestion, QuizQuestionFieldValue } from "../types/add-module.type";
+import type {
+  QuizQuestion,
+  QuizQuestionFieldValue,
+} from "../types/add-module.type";
 
 interface QuizQuestionCardProps {
   question: QuizQuestion;
@@ -30,7 +33,7 @@ export default function QuizQuestionCard({
         </span>
         <button
           onClick={onRemove}
-          className="p-1 text-red-600 hover:bg-red-50 rounded transition-all"
+          className="p-1 text-red-600 hover:bg-red-50 rounded cursor-pointer transition-all"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -58,7 +61,7 @@ export default function QuizQuestionCard({
             <select
               value={question.type}
               onChange={handleTypeChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
             >
               <option value="multiple-choice">Multiple Choice</option>
               <option value="true-false">True/False</option>
@@ -94,7 +97,7 @@ export default function QuizQuestionCard({
                     name={`correct-${question.id}`}
                     checked={question.correctAnswer === option && option !== ""}
                     onChange={() => onUpdate("correctAnswer", option)}
-                    className="w-4 h-4 text-emerald-600 focus:ring-emerald-500"
+                    className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                   />
                   <span className="text-sm font-semibold text-gray-700 w-16">
                     Option {String.fromCharCode(65 + optIndex)}:
@@ -103,8 +106,10 @@ export default function QuizQuestionCard({
                     type="text"
                     value={option}
                     onChange={(e) => onUpdateOption(optIndex, e.target.value)}
-                    placeholder={`Enter option ${String.fromCharCode(65 + optIndex)}`}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                    placeholder={`Enter option ${String.fromCharCode(
+                      65 + optIndex
+                    )}`}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                   />
                 </div>
               ))}
@@ -138,7 +143,9 @@ export default function QuizQuestionCard({
                   False
                 </span>
               </div>
-              <p className="text-xs text-gray-500 mt-2">Select the correct answer</p>
+              <p className="text-xs text-gray-500 mt-2">
+                Select the correct answer
+              </p>
             </div>
           )}
         </div>

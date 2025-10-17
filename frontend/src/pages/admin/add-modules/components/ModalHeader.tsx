@@ -5,13 +5,23 @@ interface ModalHeaderProps {
   onClose: () => void;
 }
 
-const stepTitles = ["Module Information", "Add Chapters", "Q&A & Quizzes", "Review & Publish"];
+const stepTitles = [
+  "Module Information",
+  "Add Chapters",
+  "Q&A & Quizzes",
+  "Review & Publish",
+];
 
-export default function ModalHeader({ currentStep, onClose }: ModalHeaderProps) {
+export default function ModalHeader({
+  currentStep,
+  onClose,
+}: ModalHeaderProps) {
   return (
     <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 md:px-8 py-6 flex items-center justify-between">
       <div>
-        <h2 className="text-2xl md:text-3xl font-bold text-white">Create New Training Module</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-white">
+          Create New Training Module
+        </h2>
         <p className="text-emerald-50 text-sm mt-1">
           Step {currentStep} of 4 — {stepTitles[currentStep - 1]}
         </p>

@@ -20,28 +20,24 @@ export interface QuizQuestion {
   points: string;
 }
 
-export interface Chapter {
+export interface Lesson {
   id: string;
   title: string;
-  description: string;
   duration: string;
   order: number;
-  prerequisites: string;
-  contentSections: ContentSection[];
+  content: string;
   qaQuestions?: QAQuestion[];
   quizQuestions?: QuizQuestion[];
 }
 
 export interface ModuleFormData {
   title: string;
-  shortDescription: string;
-  detailedDescription: string;
+  description: string;
   category: "sales" | "admin" | "customer";
   level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   duration: string;
   prerequisites: string;
   learningObjectives: string[];
-  status: "DRAFT" | "ACTIVE" | "ARCHIVED";
   tags: string;
   language: string;
 }
@@ -52,8 +48,12 @@ export interface AddModuleModalProps {
   category: "sales" | "admin" | "customer";
 }
 
-export type ChapterFieldValue = string | number | ContentSection[] | QAQuestion[] | QuizQuestion[];
+export type LessonFieldValue = string | number | QAQuestion[] | QuizQuestion[];
 
 export type QAQuestionFieldValue = string | "short" | "paragraph";
 
-export type QuizQuestionFieldValue = string | "multiple-choice" | "true-false" | string[];
+export type QuizQuestionFieldValue =
+  | string
+  | "multiple-choice"
+  | "true-false"
+  | string[];

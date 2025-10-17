@@ -1,5 +1,8 @@
 import { Trash2 } from "lucide-react";
-import type { QAQuestion, QAQuestionFieldValue } from "../types/add-module.type";
+import type {
+  QAQuestion,
+  QAQuestionFieldValue,
+} from "../types/add-module.type";
 
 interface QAQuestionCardProps {
   question: QAQuestion;
@@ -50,7 +53,7 @@ export default function QAQuestionCard({
             <select
               value={question.answerType}
               onChange={(e) => onUpdate("answerType", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
             >
               <option value="short">Short Answer</option>
               <option value="paragraph">Paragraph</option>

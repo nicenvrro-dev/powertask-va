@@ -28,8 +28,8 @@ export default function Step1ModuleInfo({
       <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
         <h3 className="font-semibold text-blue-900 mb-1">Module Information</h3>
         <p className="text-sm text-blue-700">
-          Start by providing basic information about your training module. This will help learners
-          understand what to expect.
+          Start by providing basic information about your training module. This
+          will help learners understand what to expect.
         </p>
       </div>
 
@@ -49,28 +49,18 @@ export default function Step1ModuleInfo({
 
         <div className="md:col-span-2">
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Short Description <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={formData.shortDescription}
-            onChange={(e) => onUpdate({ shortDescription: e.target.value })}
-            placeholder="Brief one-line description"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-          />
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Detailed Description <span className="text-red-500">*</span>
+            Module Description <span className="text-red-500">*</span>
           </label>
           <textarea
-            value={formData.detailedDescription}
-            onChange={(e) => onUpdate({ detailedDescription: e.target.value })}
-            placeholder="Provide a comprehensive overview of what this module covers..."
-            rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"
+            value={formData.description}
+            onChange={(e) => onUpdate({ description: e.target.value })}
+            placeholder="Provide a comprehensive overview of what this module covers. You can write multiple paragraphs here to fully describe the module content, objectives, and what learners will gain..."
+            rows={8}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-y"
           />
+          <p className="text-xs text-gray-500 mt-1">
+            Write detailed paragraphs about the module
+          </p>
         </div>
 
         <div>
@@ -91,8 +81,10 @@ export default function Step1ModuleInfo({
           </label>
           <select
             value={formData.level}
-            onChange={(e) => onUpdate({ level: e.target.value as ModuleFormData["level"] })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
+            onChange={(e) =>
+              onUpdate({ level: e.target.value as ModuleFormData["level"] })
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
           >
             <option value="BEGINNER">Beginner</option>
             <option value="INTERMEDIATE">Intermediate</option>
@@ -110,23 +102,8 @@ export default function Step1ModuleInfo({
             onChange={(e) => onUpdate({ duration: e.target.value })}
             placeholder="e.g., 60"
             min="1"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
           />
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Status <span className="text-red-500">*</span>
-          </label>
-          <select
-            value={formData.status}
-            onChange={(e) => onUpdate({ status: e.target.value as ModuleFormData["status"] })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
-          >
-            <option value="DRAFT">Draft</option>
-            <option value="ACTIVE">Active</option>
-            <option value="ARCHIVED">Archived</option>
-          </select>
         </div>
 
         <div className="md:col-span-2">
@@ -189,7 +166,9 @@ export default function Step1ModuleInfo({
             placeholder="e.g., communication, negotiation, closing"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
           />
-          <p className="text-xs text-gray-500 mt-1">Separate tags with commas</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Separate tags with commas
+          </p>
         </div>
 
         <div>
@@ -199,7 +178,7 @@ export default function Step1ModuleInfo({
           <select
             value={formData.language}
             onChange={(e) => onUpdate({ language: e.target.value })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
           >
             <option value="English">English</option>
             <option value="Spanish">Spanish</option>

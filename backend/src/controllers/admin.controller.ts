@@ -9,7 +9,13 @@ import { hashPassword } from "../utils/bycrypt";
 export const seedAdminAccount = async () => {
   try {
     // Check if an admin account already exists
-    const existingAdmin = await UserSchema.findOne({ role: "admin" });
+    const existingAdmin = await UserSchema.findOne({
+      $or: [
+        { role: "admin" },
+        { role: "super_admin" },
+        { email: process.env.SEED_ADMIN_EMAIL },
+      ],
+    });
 
     // If found, skip creation
     if (existingAdmin) {

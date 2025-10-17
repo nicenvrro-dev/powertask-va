@@ -19,7 +19,9 @@ export default function SuccessToast({ isVisible }: SuccessToastProps) {
       </div>
       <div>
         <p className="font-bold text-lg">Module Published Successfully!</p>
-        <p className="text-sm text-green-100">Your training module is now live</p>
+        <p className="text-sm text-green-100">
+          Your training module is now live
+        </p>
       </div>
     </motion.div>
   );

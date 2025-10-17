@@ -13,11 +13,17 @@ import {
 import { useState } from "react";
 import { useAuthStore } from "../../../store/user.store";
 import { formatServiceFocus } from "../../../utils/formatServiceFocus.util";
+import type { BaseUserAccount } from "../../../types/auth.type";
+
+import EmployeeDetailsModal from "./components/EmployeeDetailsModal";
 
 export default function Employees() {
   const [searchQuery, setSearchQuery] = useState("");
   const [serviceFilter, setServiceFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] =
+    useState<BaseUserAccount | null>(null);
 
   const { allUsers, getAllUserAccount } = useAuthStore();
 
@@ -51,6 +57,11 @@ export default function Employees() {
 
     return iconMap[serviceFocus] || <HelpCircle className="w-4 h-4" />;
   }
+
+  const handleViewEmployee = (employee: BaseUserAccount) => {
+    setSelectedEmployee(employee);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -241,9 +252,12 @@ export default function Employees() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <button className="px-4 py-2 bg-[#1A3D2D] text-white rounded-lg cursor-pointer hover:bg-gray-900 transition-colors font-medium flex items-center gap-2">
-                        <Eye className="w-4 h-4" />
-                        View
+                      <button
+                        onClick={() => handleViewEmployee(employee)}
+                        className="p-3 bg-slate-100 text-slate-700 rounded-lg cursor-pointer hover:bg-slate-200 transition-all flex items-center justify-center group"
+                        title="View Details"
+                      >
+                        <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       </button>
                     </td>
                   </motion.tr>
@@ -264,6 +278,12 @@ export default function Employees() {
             </div>
           )}
         </motion.div>
+
+        <EmployeeDetailsModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          employee={selectedEmployee}
+        />
       </div>
     </div>
   );

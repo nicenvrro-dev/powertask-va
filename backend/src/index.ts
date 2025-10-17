@@ -10,6 +10,8 @@ import { seedAdminAccount } from "./controllers/admin.controller";
 import userRoutes from "./routes/user.route";
 import adminRoutes from "./routes/admin.route";
 import activityRoutes from "./routes/activity.route";
+import moduleRoutes from "./routes/module.route";
+import { seedServicesCollection } from "./controllers/module.controller";
 
 dotenv.config();
 
@@ -32,6 +34,7 @@ app.use(cookieParser());
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/activity", activityRoutes);
+app.use("/api/module", moduleRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
@@ -40,5 +43,6 @@ app.get("/", (req, res) => {
 app.listen(PORT, "0.0.0.0", async () => {
   connectToMongoDB();
   await seedAdminAccount();
+  await seedServicesCollection();
   console.log(`🚀 Server Running on port ${PORT}`);
 });

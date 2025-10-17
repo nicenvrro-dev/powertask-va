@@ -1,4 +1,4 @@
-import type { Chapter } from "../types/add-module.type";
+import type { Lesson } from "../types/add-module.type";
 
 export const getCategoryLabel = (category: string): string => {
   switch (category) {
@@ -13,21 +13,21 @@ export const getCategoryLabel = (category: string): string => {
   }
 };
 
-export const calculateTotalDuration = (chapters: Chapter[]): number => {
-  return chapters.reduce((total, chapter) => {
-    const duration = parseInt(chapter.duration) || 0;
+export const calculateTotalDuration = (lessons: Lesson[]): number => {
+  return lessons.reduce((total, lesson) => {
+    const duration = parseInt(lesson.duration) || 0;
     return total + duration;
   }, 0);
 };
 
-export const getTotalQACount = (chapters: Chapter[]): number => {
-  return chapters.reduce((total, chapter) => {
-    return total + (chapter.qaQuestions?.length || 0);
+export const getTotalQACount = (lessons: Lesson[]): number => {
+  return lessons.reduce((total, lesson) => {
+    return total + (lesson.qaQuestions?.length || 0);
   }, 0);
 };
 
-export const getTotalQuizCount = (chapters: Chapter[]): number => {
-  return chapters.reduce((total, chapter) => {
-    return total + (chapter.quizQuestions?.length || 0);
+export const getTotalQuizCount = (lessons: Lesson[]): number => {
+  return lessons.reduce((total, lesson) => {
+    return total + (lesson.quizQuestions?.length || 0);
   }, 0);
 };
