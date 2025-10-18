@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import ServicesModel from "../models/service.model";
-import { v4 as uuidv4 } from "uuid";
+import { ServicesCollectionDoc } from "../types/services.types";
 
 /**
  * Automatically seeds the Services collection
@@ -44,7 +44,7 @@ export const createTrainingModule = async (req: Request, res: Response) => {
 
     const { category } = moduleInfo;
 
-    // Construct the full TrainingModule object
+    // Construct the new training module object
     const newModule = {
       title: moduleInfo.title,
       description: moduleInfo.description,
@@ -61,27 +61,34 @@ export const createTrainingModule = async (req: Request, res: Response) => {
       updatedAt: new Date().toISOString(),
     };
 
+    // Restrict targetCategory to known keys (fixes the TS error)
+    type CategoryKey = keyof Pick<
+      ServicesCollectionDoc,
+      "sales" | "administrativeSupport" | "customerService"
+    >;
+
     // --- Determine which category to push into ---
-    let targetCategory: string;
-    switch (category) {
-      case "admin":
-        targetCategory = "administrativeSupport";
-        break;
-      case "customer":
-        targetCategory = "customerService";
-        break;
-      default:
-        targetCategory = "sales";
-        break;
-    }
+    const targetCategory: CategoryKey =
+      category === "admin"
+        ? "administrativeSupport"
+        : category === "customer"
+        ? "customerService"
+        : "sales";
 
     const updateField = `${targetCategory}.modules`;
 
+    // Push new module and return only the newly inserted one
     const updatedServices = await ServicesModel.findOneAndUpdate(
       {},
       { $push: { [updateField]: newModule } },
-      { new: true, upsert: true }
-    );
+      {
+        new: true,
+        upsert: true,
+        projection: {
+          [`${updateField}`]: { $slice: -1 }, // Return only the last inserted module
+        },
+      }
+    ).lean();
 
     if (!updatedServices) {
       return res.status(500).json({
@@ -90,14 +97,46 @@ export const createTrainingModule = async (req: Request, res: Response) => {
       });
     }
 
+    // Get the newly inserted module
+    const insertedModule =
+      updatedServices[targetCategory]?.modules?.[0] || null;
+
     return res.status(201).json({
       success: true,
       message: `Training module added to ${targetCategory}.`,
-      data: newModule,
+      category: targetCategory,
+      data: insertedModule,
     });
   } catch (error) {
     console.error("Failed to create training module", error);
     res.status(500).json({ message: "Failed to create training module" });
     return;
+  }
+};
+
+/**
+ * Fetches all training modules from the Services collection.
+ */
+export const fetchServicesData = async (req: Request, res: Response) => {
+  try {
+    // Fetch the entire Services collection document
+    const services = await ServicesModel.find().lean();
+
+    console.log("Services fetched:", services);
+
+    if (!services) {
+      return res.status(404).json({
+        success: false,
+        message: "Services collection not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: services,
+    });
+  } catch (error) {
+    console.error("Failed to fetch training modules", error);
+    res.status(500).json({ message: "Failed to fetch training modules" });
   }
 };

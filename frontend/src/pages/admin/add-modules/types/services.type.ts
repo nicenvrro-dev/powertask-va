@@ -110,6 +110,13 @@ export interface ServicesCollection {
 
 export type ServicesStore = {
   createTrainingModuleLoading: boolean;
+  fetchServicesDataLoading: boolean;
 
-  createTrainingModule: (payload: CreateTrainingModulePayload) => Promise<void>;
+  servicesData: ServicesCollection | null;
+
+  createTrainingModule: (
+    payload: CreateTrainingModulePayload
+  ) => Promise<TrainingModule>;
+
+  fetchServicesData: () => Promise<ServicesCollection>;
 };

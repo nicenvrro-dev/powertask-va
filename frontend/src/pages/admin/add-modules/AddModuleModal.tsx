@@ -497,23 +497,17 @@ export default function AddModuleModal({
       },
     };
 
-    await createTrainingModule(moduleData);
+    const newModuleCreated = await createTrainingModule(moduleData);
 
-    console.log("==========================================");
-    console.log("📦 PUBLISHING TRAINING MODULE");
-    console.log("==========================================");
-    console.log(JSON.stringify(moduleData, null, 2));
-    console.log("==========================================");
-    console.log("✅ Module data structure complete!");
-    console.log("==========================================");
+    if (newModuleCreated) {
+      setShowPublishModal(false);
+      setShowSuccessToast(true);
 
-    setShowPublishModal(false);
-    setShowSuccessToast(true);
-
-    setTimeout(() => {
-      setShowSuccessToast(false);
-      onClose();
-    }, 3000);
+      setTimeout(() => {
+        setShowSuccessToast(false);
+        onClose();
+      }, 3000);
+    }
   };
 
   if (!isOpen) return null;

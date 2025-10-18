@@ -11,8 +11,9 @@ import {
   Settings,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddModuleModal from "../add-modules/AddModuleModal";
+import { useServiceStore } from "../../../store/service.store";
 
 interface Module {
   id: string;
@@ -118,6 +119,8 @@ export default function Modules() {
 
   const currentModules = MODULES_DATA[activeTab];
 
+  const { fetchServicesData, servicesData } = useServiceStore();
+
   const filteredModules = currentModules.filter((module) => {
     const matchesSearch =
       module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -125,6 +128,12 @@ export default function Modules() {
     const matchesLevel = levelFilter === "all" || module.level === levelFilter;
     return matchesSearch && matchesLevel;
   });
+
+  useEffect(() => {
+    fetchServicesData();
+  }, [fetchServicesData, servicesData]);
+
+  console.log("Service Collection: ");
 
   const getLevelColor = (level: string) => {
     switch (level) {
